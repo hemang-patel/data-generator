@@ -1,0 +1,19 @@
+{
+  "name": "cw_transaction_data_generator_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "faker": "^4.1.0",
+    "csv-write-stream": "^2.0.0",
+    "underscore": "^1.9.2",
+    "moment": "^2.24.0",
+    "csv-parser": "^2.3.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
