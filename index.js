@@ -2,7 +2,6 @@ const csvModel = require('./engine/csv-model');
 const csvWriter = require('csv-write-stream');
 const fs = require('fs');
 const _ = require('underscore');
-const toolbox = require('./util/toolbox');
 
 let writer;
 let line = [];
@@ -66,11 +65,11 @@ class index {
                     let entryNumber = Number(_entryNumber) + j;
                     let documentType = csvModel.getDocumentType();
                     let detailComment = csvModel.getDetailComment();
-                    let effectiveDate = csvModel.getEffectiveDate();
                     let postingDate = csvModel.getPostingDate(IS_MULTI_YEAR);
-                    let postBy = _.sample(users);
+                    let enteredDate = csvModel.getEnteredDate();
+                    let enteredBy = _.sample(users);
                     let postingStatus = csvModel.getPostingStatus();
-                    let approvedBy = _.sample(users);
+                    let entryApprovedBy = _.sample(users);
 
                     let fullAccount = accounts[Math.floor(Math.random() * accounts.length)];
                     let accountID = fullAccount.toString().split(':')[0];
@@ -78,8 +77,9 @@ class index {
 
                     let amount = csvModel.getAmount(MIN_AMOUNT, MAX_AMOUNT);
 
-                    line = [entryID, entryNumber, documentType, detailComment, effectiveDate, postingDate,
-                        postBy, postingStatus, approvedBy, accountID, accountName, amount];
+
+                    line = [entryID, entryNumber, documentType, detailComment, postingDate, enteredDate,
+                        enteredBy, postingStatus, entryApprovedBy, accountID, accountName, amount];
                     process.stdout.write(`Creating Transaction ${i + 1}, line ${j + 1} ` + '\r');
                     writer.write(line);
                 }
