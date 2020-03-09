@@ -8,12 +8,12 @@ let line = [];
 let accounts = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 5000;
-const LINE_PER_TRANSACTION = 2;
-const NO_OF_ACCOUNTS = 100;
-const NO_OF_USERS = 10;
+const NO_OF_TRANSACTIONS = 5000000;
+const LINE_PER_TRANSACTION = 1;
+const NO_OF_ACCOUNTS = 100; // Max: 5000
+const NO_OF_USERS = 10; // Max: 5000
 const IS_MULTI_YEAR = true;
-const FILE_NAME = '500k transactions - TC1'; // no file format
+const FILE_NAME = '500k transactions - TC1'; //no file extension
 
 const MIN_AMOUNT = -100000;
 const MAX_AMOUNT = 100000;
@@ -24,9 +24,9 @@ class index {
         /*toolbox.generateUsers(5000);
         toolbox.generateAccounts(5000);*/
 
-        // Store NO_OF_ACCOUNTS from accounts.csv (5k account id and name) to array
+        // Store NO_OF_ACCOUNTS from accounts.csv (5k account id and name) to an array
         this.fillAnArray('accounts');
-        // Store NO_OF_ACCOUNTS from users.csv (5k user) to array
+        // Store NO_OF_ACCOUNTS from users.csv (5k user) to an array
         this.fillAnArray('users');
 
         this.generateCSV(NO_OF_TRANSACTIONS, LINE_PER_TRANSACTION, FILE_NAME);
@@ -102,14 +102,5 @@ class index {
 
 index.prototype.main();
 
-// Fix - date N/A
 // ISSUE - https://search-elk-cwcloudtest-7licp5nanfmcpk4g5prkpi4mb4.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/doc/logstash-*/logstash-20200308/access_log?id=_EKVu3ABV0tMhyqqCjym&_g=()
-// use xerxes's variation logic
-
-// missing description and specific_keywords PNM fix - done
-// read users and account from separate file -- done
-// amount variations -- done
-// fix append logic. remove file content if its the same file -- done
-// fix column ordering -- done
-// transaction to transaction line ratio -- done
 
