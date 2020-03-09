@@ -77,7 +77,6 @@ class index {
 
                     let amount = csvModel.getAmount(MIN_AMOUNT, MAX_AMOUNT);
 
-
                     line = [entryID, entryNumber, documentType, detailComment, postingDate, enteredDate,
                         enteredBy, postingStatus, entryApprovedBy, accountID, accountName, amount];
                     process.stdout.write(`Creating Transaction ${i + 1}, line ${j + 1} ` + '\r');
@@ -92,7 +91,7 @@ class index {
                         Accounts: ${NO_OF_ACCOUNTS}
                         Is Multi-year?: ${IS_MULTI_YEAR}
                         File: ${FOLDER_NAME}/${file}.csv`);
-            console.log(`Elapsed time: ${(new Date().getTime() - start) / 100}s`);
+            console.log(`Elapsed time: ${(new Date().getTime() - start) / 1000}s`);
         } catch (err) {
             console.error(err);
         }
