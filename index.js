@@ -8,12 +8,12 @@ let line = [];
 let accounts = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 100;
-const LINE_PER_TRANSACTION = 1;
+const NO_OF_TRANSACTIONS = 500000;
+const LINE_PER_TRANSACTION = 2;
 const NO_OF_ACCOUNTS = 100; // Max: 5000
 const NO_OF_USERS = 10; // Max: 5000
 const IS_MULTI_YEAR = true;
-// const FILE_NAME = '500k transactions - TC1'; //no file extension
+const FILE_NAME = '500k transactions - TC1'; //no file extension
 
 const MIN_AMOUNT = -100000;
 const MAX_AMOUNT = 100000;
@@ -29,7 +29,7 @@ class index {
         // Store NO_OF_ACCOUNTS from users.csv (5k user) to an array
         this.fillAnArray('users');
 
-        this.generateCSV(NO_OF_TRANSACTIONS, LINE_PER_TRANSACTION, this.createFileName());
+        this.generateCSV(NO_OF_TRANSACTIONS, LINE_PER_TRANSACTION, FILE_NAME);
     }
 
     fillAnArray(type) {
@@ -42,22 +42,14 @@ class index {
                 break;
             case 'users':
                 let totalUsers = fs.readFileSync('resource/users.csv', 'utf-8').split(',');
-                for (let i = 0; i < NO_OF_ACCOUNTS; i++) {
+                for (let i = 0; i < NO_OF_USERS; i++) {
                     users[i] = totalUsers[Math.floor(Math.random() * totalUsers.length)].trim();
                 }
                 break;
         }
     }
 
-    createFileName() {
-        if (IS_MULTI_YEAR) {
-            return `${LINE_PER_TRANSACTION}_Line-${NO_OF_TRANSACTIONS}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U-multiYear`;
-        } else {
-            return `${LINE_PER_TRANSACTION}_Lines-${NO_OF_TRANSACTIONS}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U`;
-        }
-    }
-
-    generateCSV(noOfTransactions, linePerTransaction, filename) {
+    generateCSV(noOfTransactions, linePerTransaction, file) {
         let start = new Date().getTime();
         writer = csvWriter({headers: csvModel.getHeader()});
         try {
@@ -65,7 +57,7 @@ class index {
                 fs.mkdirSync(FOLDER_NAME, {recursive: true});
                 console.log(`Created folder ${FOLDER_NAME}`);
             }
-            writer.pipe(fs.createWriteStream(`${FOLDER_NAME}/${filename}.csv`, {flags: 'w'}));
+            writer.pipe(fs.createWriteStream(`${FOLDER_NAME}/${file}.csv`, {flags: 'w'}));
             for (let i = 0; i < noOfTransactions; i++) {
                 let entryID = csvModel.getEntryID();
                 let _entryNumber = csvModel.getEntryNumber();
@@ -98,7 +90,7 @@ class index {
                         Users: ${NO_OF_USERS}
                         Accounts: ${NO_OF_ACCOUNTS}
                         Is Multi-year?: ${IS_MULTI_YEAR}
-                        File: ${FOLDER_NAME}/${filename}.csv`);
+                        File: ${FOLDER_NAME}/${file}.csv`);
             console.log(`Elapsed time: ${(new Date().getTime() - start) / 1000}s`);
         } catch (err) {
             console.error(err);
