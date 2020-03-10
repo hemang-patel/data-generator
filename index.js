@@ -8,8 +8,8 @@ let line = [];
 let accounts = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 5000000;
-const LINE_PER_TRANSACTION = 1;
+const NO_OF_TRANSACTIONS = 500000;
+const LINE_PER_TRANSACTION = 2;
 const NO_OF_ACCOUNTS = 100; // Max: 5000
 const NO_OF_USERS = 10; // Max: 5000
 const IS_MULTI_YEAR = true;
@@ -42,7 +42,7 @@ class index {
                 break;
             case 'users':
                 let totalUsers = fs.readFileSync('resource/users.csv', 'utf-8').split(',');
-                for (let i = 0; i < NO_OF_ACCOUNTS; i++) {
+                for (let i = 0; i < NO_OF_USERS; i++) {
                     users[i] = totalUsers[Math.floor(Math.random() * totalUsers.length)].trim();
                 }
                 break;
