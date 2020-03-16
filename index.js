@@ -2,27 +2,27 @@ const csvModel = require('./engine/csv-model');
 const csvWriter = require('csv-write-stream');
 const fs = require('fs');
 const _ = require('underscore');
+const toolbox = require('./util/toolbox');
 
 let writer;
 let line = [];
 let accounts = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 500000;
+const NO_OF_TRANSACTIONS = 5000000;
 const LINE_PER_TRANSACTION = 2;
-const NO_OF_ACCOUNTS = 100; // Max: 5000
+const NO_OF_ACCOUNTS = 100; // Max: 10000
 const NO_OF_USERS = 10; // Max: 5000
-const IS_MULTI_YEAR = true;
-// const FILE_NAME = '500k transactions - TC1'; //no file extension
+const IS_MULTI_YEAR = false;
 
 const MIN_AMOUNT = -100000;
 const MAX_AMOUNT = 100000;
-const FOLDER_NAME = 'dataset';
+const FOLDER_NAME = 'performance-testing';
 
 class index {
     main() {
-        /*toolbox.generateUsers(5000);
-        toolbox.generateAccounts(5000);*/
+        // toolbox.generateUsers(5000);
+        // toolbox.generateAccounts(10000);
 
         // Store NO_OF_ACCOUNTS from accounts.csv (5k account id and name) to an array
         this.fillAnArray('accounts');
@@ -50,10 +50,21 @@ class index {
     }
 
     createFileName() {
+        let noOfTransactions;
+        let noOfTxsLength = NO_OF_TRANSACTIONS.toString().length;
+        if (noOfTxsLength === 6) {
+            noOfTransactions = `${NO_OF_TRANSACTIONS.toString().slice(0, noOfTxsLength / 2)}k`;
+        }
+        if (noOfTxsLength === 7) {
+            noOfTransactions = `${NO_OF_TRANSACTIONS.toString().slice(0, 1)}M`;
+        }
+        if (noOfTxsLength === 8) {
+            noOfTransactions = `${NO_OF_TRANSACTIONS.toString().slice(0,)}M`;
+        }
         if (IS_MULTI_YEAR) {
-            return `${LINE_PER_TRANSACTION}_Line-${NO_OF_TRANSACTIONS}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U-multiYear`;
+            return `${LINE_PER_TRANSACTION}_Lines-${noOfTransactions}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U-multiYear`;
         } else {
-            return `${LINE_PER_TRANSACTION}_Lines-${NO_OF_TRANSACTIONS}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U`;
+            return `${LINE_PER_TRANSACTION}_Lines-${noOfTransactions}_Txs-${NO_OF_ACCOUNTS}_A-${NO_OF_USERS}_U`;
         }
     }
 
@@ -91,23 +102,24 @@ class index {
                     writer.write(line);
                 }
             }
+            writer.end();
             console.log(`Created:
-                        Total Transactions: ${noOfTransactions * linePerTransaction}
+                        Total Entries: ${noOfTransactions * linePerTransaction}
                         Transactions: ${noOfTransactions}
                         Line per Transactions: ${linePerTransaction}
-                        Users: ${NO_OF_USERS}
                         Accounts: ${NO_OF_ACCOUNTS}
+                        Users: ${NO_OF_USERS}
                         Is Multi-year?: ${IS_MULTI_YEAR}
                         File: ${FOLDER_NAME}/${filename}.csv`);
-            console.log(`Elapsed time: ${(new Date().getTime() - start) / 1000}s`);
+
+            console.log(`Elapsed time: ${((new Date().getTime() - start) / 1000) / 60} minute`);
+
         } catch (err) {
             console.error(err);
         }
-        writer.end();
     }
 }
 
 index.prototype.main();
 
-// ISSUE - https://search-elk-cwcloudtest-7licp5nanfmcpk4g5prkpi4mb4.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/doc/logstash-*/logstash-20200308/access_log?id=_EKVu3ABV0tMhyqqCjym&_g=()
-
+// ISSUE - cwi.outliers_CBLOF failing - https://search-elk-cwcloudtest-7licp5nanfmcpk4g5prkpi4mb4.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/doc/logstash-*/logstash-20200308/access_log?id=_EKVu3ABV0tMhyqqCjym&_g=()
