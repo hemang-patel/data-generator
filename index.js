@@ -36,14 +36,14 @@ class index {
         switch (type) {
             case 'accounts':
                 let totalAccounts = fs.readFileSync('resource/accounts.csv', 'utf-8').split(',');
-                for (let i = 0; i < NO_OF_ACCOUNTS; i++) {
-                    accounts[i] = totalAccounts[Math.floor(Math.random() * totalAccounts.length)].trim();
+                for (let i = 0; i < NO_OF_ACCOUNTS - 1; i++) {
+                    accounts[i] = totalAccounts[Math.floor(Math.random() * totalAccounts.length) + 1].trim();
                 }
                 break;
             case 'users':
                 let totalUsers = fs.readFileSync('resource/users.csv', 'utf-8').split(',');
-                for (let i = 0; i < NO_OF_USERS; i++) {
-                    users[i] = totalUsers[Math.floor(Math.random() * totalUsers.length)].trim();
+                for (let i = 0; i < NO_OF_USERS - 1; i++) {
+                    users[i] = totalUsers[Math.floor(Math.random() * totalUsers.length) + 1].trim();
                 }
                 break;
         }
@@ -86,11 +86,11 @@ class index {
                     let detailComment = csvModel.getDetailComment();
                     let postingDate = csvModel.getPostingDate(IS_MULTI_YEAR);
                     let enteredDate = csvModel.getEnteredDate();
-                    let enteredBy = _.sample(users);
+                    let enteredBy = users[j];
                     let postingStatus = csvModel.getPostingStatus();
                     let entryApprovedBy = _.sample(users);
 
-                    let fullAccount = accounts[Math.floor(Math.random() * accounts.length)];
+                    let fullAccount = accounts[j];
                     let accountID = fullAccount.toString().split(':')[0];
                     let accountName = fullAccount.toString().split(':')[1];
 
