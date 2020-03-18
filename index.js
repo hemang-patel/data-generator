@@ -10,12 +10,11 @@ let accountIds = [];
 let accountNames = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 10000;
-const LINE_PER_TRANSACTION = 2;
+const NO_OF_TRANSACTIONS = 500000;
+const LINE_PER_TRANSACTION = 10;
 const NO_OF_ACCOUNTS = 10000; // Max: 10000
-const NO_OF_USERS = 1; // Max: 5000
+const NO_OF_USERS = 2500; // Max: 5000
 const IS_MULTI_YEAR = false;
-
 const MIN_AMOUNT = -100000;
 const MAX_AMOUNT = 100000;
 const FOLDER_NAME = 'performance-testing';
@@ -24,20 +23,18 @@ class index {
     main() {
         // toolbox.generateUsers(15000);
         // toolbox.generateAccounts(15000);
-
         // Store NO_OF_ACCOUNTS from accounts.csv (5k account id and name) to an array
         this.fillAnArray('accountId');
         this.fillAnArray('accountName');
         // Store NO_OF_ACCOUNTS from users.csv (5k user) to an array
         this.fillAnArray('users');
-
         this.generateCSV(NO_OF_TRANSACTIONS, LINE_PER_TRANSACTION, this.createFileName());
     }
 
     fillAnArray(type) {
         switch (type) {
             case 'accountId':
-                let totalAccId = fs.readFileSync('resource/accountId.csv', 'utf-8').split(',');
+                let totalAccId = fs.readFileSync('resource/accountId.csv', 'utf-8').split('\r');
                 for (let i = 0; i < NO_OF_ACCOUNTS; i++) {
                     accountIds[i] = totalAccId[i];
                 }
@@ -99,14 +96,13 @@ class index {
                     let postingStatus = csvModel.getPostingStatus();
                     let entryApprovedBy = _.sample(users);
                     entryApprovedBy = entryApprovedBy.toString().trim();
-
-                    let accountID = accountIds[i].toString().trim();
-                    let accountName = accountNames[i].toString().trim();
+                    let accountID = _.sample(accountIds);
+                    accountID = accountID.toString().trim();
+                    let accountName = _.sample(accountNames);
+                    accountName = accountName.toString().trim();
                     let amount = csvModel.getAmount(MIN_AMOUNT, MAX_AMOUNT);
-
-                    line = [entryID, entryNumber, documentType, detailComment, postingDate, enteredDate,
-                        enteredBy, postingStatus, entryApprovedBy, accountID, accountName, amount];
-                    console.log(JSON.stringify(line));
+                    line = [entryID, entryNumber, documentType, postingDate, enteredDate, enteredBy, postingStatus, entryApprovedBy,
+                        detailComment, accountID, accountName, amount];
                     process.stdout.write(`Creating Transaction ${i + 1}, line ${j + 1} ` + '\r');
                     writer.write(line);
                 }
@@ -120,9 +116,7 @@ class index {
                         Users: ${NO_OF_USERS}
                         Is Multi-year?: ${IS_MULTI_YEAR}
                         File: ${FOLDER_NAME}/${filename}.csv`);
-
             console.log(`Elapsed time: ${((new Date().getTime() - start) / 1000) / 60} minute`);
-
         } catch (err) {
             console.error(err);
         }
@@ -130,5 +124,4 @@ class index {
 }
 
 index.prototype.main();
-
 // ISSUE - cwi.outliers_CBLOF failing - https://search-elk-cwcloudtest-7licp5nanfmcpk4g5prkpi4mb4.us-east-1.es.amazonaws.com/_plugin/kibana/app/kibana#/doc/logstash-*/logstash-20200308/access_log?id=_EKVu3ABV0tMhyqqCjym&_g=()
