@@ -10,19 +10,23 @@ let accountIds = [];
 let accountNames = [];
 let users = [];
 
-const NO_OF_TRANSACTIONS = 500000;
-const LINE_PER_TRANSACTION = 10;
-const NO_OF_ACCOUNTS = 10000; // Max: 10000
-const NO_OF_USERS = 2500; // Max: 5000
-const IS_MULTI_YEAR = false;
+const NO_OF_TRANSACTIONS = 10000;
+const LINE_PER_TRANSACTION = 2;
+const NO_OF_ACCOUNTS = 50; // Max: 10000
+const NO_OF_USERS = 10; // Max: 5000
+const IS_MULTI_YEAR = true;
 const MIN_AMOUNT = -100000;
 const MAX_AMOUNT = 100000;
 const FOLDER_NAME = 'performance-testing';
 
+var data = [];
+
 class index {
     main() {
-        // toolbox.generateUsers(15000);
-        // toolbox.generateAccounts(15000);
+         toolbox.generateUsers(15000);
+         toolbox.generateAccounts(15000);
+
+
         // Store NO_OF_ACCOUNTS from accounts.csv (5k account id and name) to an array
         this.fillAnArray('accountId');
         this.fillAnArray('accountName');
@@ -92,21 +96,57 @@ class index {
                     let postingDate = csvModel.getPostingDate(IS_MULTI_YEAR);
                     let enteredDate = csvModel.getEnteredDate();
                     let enteredBy = _.sample(users);
+
                     enteredBy = enteredBy.toString().trim();
                     let postingStatus = csvModel.getPostingStatus();
                     let entryApprovedBy = _.sample(users);
                     entryApprovedBy = entryApprovedBy.toString().trim();
                     let accountID = _.sample(accountIds);
-                    accountID = accountID.toString().trim();
+                  //  accountID = accountID.toString().trim();
                     let accountName = _.sample(accountNames);
-                    accountName = accountName.toString().trim();
+
+                    let lineNumber = csvModel.getLineNumber();
+                  //  accountName = accountName.toString().trim();
                     let amount = csvModel.getAmount(MIN_AMOUNT, MAX_AMOUNT);
                     line = [entryID, entryNumber, documentType, postingDate, enteredDate, enteredBy, postingStatus, entryApprovedBy,
                         detailComment, accountID, accountName, amount];
                     process.stdout.write(`Creating Transaction ${i + 1}, line ${j + 1} ` + '\r');
                     writer.write(line);
+
+
+                    //JSON File
+                    var obj = {
+                        'id': entryID,
+                        'accountID': accountID,
+                        'posting': postingDate,
+                        'total': amount,
+                        'person': enteredBy,
+                        'prop': 'lc21f1c6-f043-4cf2',
+                        'accountMainDescription': 'account-Ä-main',
+                        'number': entryNumber,
+                        'lineNumber': lineNumber,
+                        'detailComment': detailComment,
+                        'documentType': documentType,
+                        'documentNumber': lineNumber,
+                        'documentApplyToNumber': lineNumber,
+                        'identifierCode': lineNumber
+
+                    };
+
+                    // pushing each object here in array
+                    data.push(obj);
                 }
             }
+
+            var json_string = JSON.stringify(data);
+
+
+            fs.writeFile("C:\\Users\\pavan.vasu\\pavan\\JSON Generated\\10000_Transactions_20K-TransactionLines.json", json_string, function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log("The file was saved!");
+            });
             writer.end();
             console.log(`Created:
                         Total Entries: ${noOfTransactions * linePerTransaction}

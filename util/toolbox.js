@@ -24,18 +24,20 @@ module.exports.generateUsers = function (number = 5000) {
 };
 
 module.exports.generateAccounts = function (number = 10000) {
-   /* let accIdFile = `${process.cwd()}/resource/accountId.csv`;
+    let accIdFile = `${process.cwd()}/resource/accountId.csv`;
     if (fs.existsSync(accIdFile)) {
         fs.unlinkSync(accIdFile);
         console.log(`Deleted accountId.csv file `);
     }
+
+    //account Ids in
     for (let i = 0; i < number; i++) {
         let accountId = csvModel.getAccountID();
         // let accountName = csvModel.getAccountName();
         let accString = `${accountId}`;
         fs.writeFileSync(`${accIdFile}`, `${accString},` + '\n', {flag: 'a'});
     }
-    console.log(`Generated ${number} Account ids in ${accIdFile}`);*/
+    console.log(`Generated ${number} Account ids in ${accIdFile}`);
 
     let accNameFile = `${process.cwd()}/resource/accountName.csv`;
     if (fs.existsSync(accNameFile)) {
