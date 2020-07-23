@@ -65,3 +65,7 @@ module.exports.getAccountName = function () {
 module.exports.getAmount = function (min, max) {
     return faker.finance.amount(min, max);
 };
+
+module.exports.getLineNumber = function () {
+    return faker.random.number();
+};
