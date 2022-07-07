@@ -10,7 +10,7 @@
     "faker": "^4.1.0",
     "csv-write-stream": "^2.0.0",
     "underscore": "^1.9.2",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "keywords": [],
   "author": "",
